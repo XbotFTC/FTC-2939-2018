@@ -10,8 +10,8 @@ public class TankDrive {
         this.drive = drive;
     }
 
-    public void drive(double leftStickY, double rightStickyY) {
-        drive.setMotorPowers(leftStickY, rightStickyY);
+    public void drive(double leftPower, double rightPower) {
+        drive.setMotorPowers(leftPower, rightPower);
     }
 
     public void stop() {

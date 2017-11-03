@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.xbot.ftc.operatingcode.teleop.XbotOperatorSubHandler;
-import org.xbot.ftc.robotcore.subsystems.elevator.CubeElevator;
+import org.xbot.ftc.robotcore.subsystems.cube.CubeElevator;
 
 public class TeleOpElevator extends XbotOperatorSubHandler {
 
@@ -20,7 +20,13 @@ public class TeleOpElevator extends XbotOperatorSubHandler {
 
     @Override
     public void handle(Gamepad gamepad1, Gamepad gamepad2) {
-        cubeElevator.setPower(Range.clip(gamepad2.right_stick_y, -1.0, 1.0));
+        if (gamepad2.left_bumper || gamepad1.left_bumper) {
+            cubeElevator.setPower(1);
+        } else if (gamepad2.left_trigger > 0.1  || gamepad2.left_trigger > 0.1) {
+            cubeElevator.setPower(-1);
+        } else {
+            cubeElevator.setPower(0);
+        }
     }
 
     @Override
