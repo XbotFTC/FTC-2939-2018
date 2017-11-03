@@ -6,41 +6,33 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.xbot.ftc.operatingcode.teleop.XbotOperatorSubHandler;
+import org.xbot.ftc.robotcore.subsystems.drive.ArcadeDrive;
 import org.xbot.ftc.robotcore.subsystems.drive.Drive;
 import org.xbot.ftc.robotcore.subsystems.drive.TankDrive;
 
-public class TeleOpTankDrive extends XbotOperatorSubHandler {
+public class TeleOpDrive extends XbotOperatorSubHandler {
 
     private Drive drive;
-    private TankDrive tankDrive;
-
-    private double powerMultiplier = 1.0;
+    private ArcadeDrive arcadeDrive;
 
     @Override
     public void start(HardwareMap hardwareMap, Telemetry telemetry) {
         super.start(hardwareMap, telemetry);
         drive = (Drive) robotSystemsManager.getSubsystem(Drive.CLASS_NAME);
-        tankDrive = drive.getTankDrive();
+        arcadeDrive = drive.getArcadeDrive();
     }
 
     @Override
     public void handle(Gamepad gamepad1, Gamepad gamepad2) {
-        if (gamepad1.dpad_up) {
-            powerMultiplier = 1.0;
-        } else if (gamepad1.dpad_left || gamepad1.dpad_right) {
-            powerMultiplier = 0.5;
-        } else if (gamepad1.dpad_down) {
-            powerMultiplier = 0.25;
-        }
-        double drive = gamepad1.left_stick_y;
-        double turn = gamepad1.right_stick_x;
-        tankDrive.drive(Range.clip(drive - turn, -1.0, 1.0) * powerMultiplier,
-                        Range.clip(drive + turn, -1.0, 1.0) * powerMultiplier);
+        if (gamepad1.dpad_up) drive.setMotorPowerMultiplier(1.0);
+        else if (gamepad1.dpad_left || gamepad1.dpad_right) drive.setMotorPowerMultiplier(0.5);
+        else if (gamepad1.dpad_down) drive.setMotorPowerMultiplier(0.25);
+        arcadeDrive.drive(gamepad1);
     }
 
     @Override
     public void stop() {
-        tankDrive.stop();
+        drive.stop();
     }
 
     @Override
